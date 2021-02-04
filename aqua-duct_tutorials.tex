@@ -7,7 +7,7 @@
 % Use the 'onehalfspacing' option for 1.5 line spacing
 % Use the 'doublespacing' option for 2.0 line spacing
 % Use the 'lineno' option for adding line numbers.
-% Use the "ASAPversion' option following article acceptance to add the DOI and relevant dates to the document foothttps://www.overleaf.com/project/5f085f02498a0400013493c4er.
+% Use the "ASAPversion' option following article acceptance to add the DOI and relevant dates to the document footer.
 % Use the 'pubversion' option for adding the citation and publication information to the document footer, when the LiveCoMS issue is finalized.
 % The 'bestpractices' option for indicates that this is a best practices guide.
 % Omit the bestpractices option to remove the marking as a LiveCoMS paper.
@@ -83,7 +83,7 @@
 
 \begin{abstract}
 % limit: 250 words, currently: 135 words
-AQUA-DUCT software reverses the standard approach of the molecular dynamics simulations analysis of macromolecules, focusing on solvent, co-solvent and small ligands analysis considered as specific molecular probes instead of analysis of macromolecules atoms movement. Here we present six basic tutorials instructing the users in the best practices for preparing, carrying out, and analysing AQUA-DUCT results in various applications. Users are expected to already have significant experience with running standard molecular dynamics simulations in any dedicated software (e.g., Amber, GROMACS, NAMD), and usage of PyMOL visualising software. The tutorials range from a basic analysis of multiple solvents trajectory used for identification of the entries/exits to the protein core, to a complex one, like identification of the key hot-spots in co-solvent MD simulations that can be used as an insight for macromolecules description, analysis, re-engineering, and for drug design. 
+AQUA-DUCT software reverses the standard approach of the molecular dynamics simulations analysis of macromolecules, focusing on solvent, cosolvent and small ligands analysis considered as specific molecular probes instead of analysis of macromolecules atoms movement. Here we present six basic tutorials instructing the users in the best practices for preparing, carrying out, and analysing AQUA-DUCT results in various applications. Users are expected to already have significant experience with running standard molecular dynamics simulations in any dedicated software (e.g., Amber, GROMACS, NAMD), and usage of PyMOL visualising software. The tutorials range from a basic analysis of multiple solvents trajectory used for identification of the entries/exits to the protein core, to a complex one, like identification of the key hot-spots in cosolvent MD simulations that can be used as an insight for macromolecules description, analysis, re-engineering, and for drug design. 
 
 \end{abstract}
 
@@ -91,7 +91,9 @@ AQUA-DUCT software reverses the standard approach of the molecular dynamics simu
 
 \section{Introduction}
 
-One of the most extensively used methods for the \textit{in silico} study of macromolecules is  molecular dynamics (MD) simulation. The power of state-of-the-art MD simulations has been used for validating and extending results provided by NMR, terahertz (THz) absorption spectroscopy, and other experimental techniques \cite{Bottaro2018}. The accuracy of MD simulations’ predictions has increased due to:  i) continuous improvements in the force fields describing the interatomic interactions of folded and intrinsically disordered proteins \cite{Huang2017}; and ii) the ability to capture events taking place over longer periods of time using enhanced sampling methods \cite{Bernardi2015} and Markov models \cite{Husic2018}. MD simulations have increased our knowledge of the conformational changes of proteins’ regulatory elements such as gates \cite{Gora2013} or loops \cite{Kress2018}. It improved our understanding of the role of water in protein folding and stability, in shaping enzyme’s activity and selectivity, or in drug design \cite{Mondal2017,Spyrakis2017}. Finally, MD simulations enabled analysis of intramolecular voids, described as cavities \cite{Stank2016} and tunnels \cite{Kingsley2015,Marques2016}, which contribute to the macromolecules’ stability, functionality, activity, and selectivity \cite{Kokkonen2019}. More than 64\% of enzymes are equipped with active sites buried inside the protein core \cite{Pravda2014}, and investigation of the ligands’ entry pathways is considered as essential for future improvements in \textit{de novo} designed enzymes \cite{Huang2016}. However, the description of protein interior dynamics is not a trivial problem. The commonly used sphere approximation fails to give an accurate description of asymmetric volumes and neglects the physico-chemical properties of the interior – factors essential for analysis of the transportation of ligands or reagents \cite{Kaushik2018}.
+One of the most extensively used methods for the \textit{in silico} study of macromolecules is  molecular dynamics (MD) simulation. The power of state-of-the-art MD simulations has been used for validating and extending results provided by NMR, terahertz (THz) absorption spectroscopy, and other experimental techniques \cite{Bottaro2018}. The accuracy of MD simulations’ predictions has increased due to:  i) continuous improvements in the force fields describing the interatomic interactions of folded and intrinsically disordered proteins \cite{Huang2017}; and ii) the ability to capture events taking place over longer periods of time using enhanced sampling methods \cite{Bernardi2015} and Markov models \cite{Husic2018}. MD simulations have increased our knowledge of the conformational changes of proteins’ regulatory elements such as gates \cite{Gora2013} or loops \cite{Kress2018}. It improved our understanding of the role of water in protein folding and stability, in shaping enzyme’s activity and selectivity, or in drug design \cite{Mondal2017,Spyrakis2017}. Finally, MD simulations enabled analysis of intramolecular voids, described as cavities \cite{Stank2016} and tunnels \cite{Kingsley2015,Marques2016}, which contribute to the macromolecules’ stability, functionality, activity, and selectivity \cite{Kokkonen2019}. More than 64\% of enzymes are equipped with active sites buried inside the protein core \cite{Pravda2014}, and investigation of the ligands’ entry pathways is considered as essential for future improvements in \textit{de novo} designed enzymes \cite{Huang2016}. However, the description of protein interior dynamics is not a trivial problem. The protein interior consists of a network of cavities and tunnels and most of the software used for their description is dedicated to either cavities and binding pockets identification, such as CavityPlus \cite{Xu2018}, MDpocket \cite{Schmidtke2011}, or fPocket \cite{Guilloux2009} or tunnels or channels detection \cite{Brezovsky2013}. The most popular software use a geometry-based approach to identify "empty spaces" within the macromolecule's structure which link the analysed cavity with the environment. They create a Voronoi diagram using a defined probe radius to describe voids within the analysed structure. However, the structural information obtained on such a basis is mostly incomplete, due to tunnels’ flexibility and their mostly asymmetric shape. The first issue can be solved partially by applying geometry-based tools to analyse MD simulations, however the problem with asymmetry remains unsolved. Such an approach also neglects the physico-chemical properties of the interior which are essential for the analysis of the transportation of ligands or reagents as noted by \cite{Kaushik2018}. Some of the limitations of such the geometry-based approach were targeted by a non-spherical approach \cite{Benkaidali2014}, however, due to its complex implementation it was rarely used. Subsequently, novel methods began to use solvent molecules as molecular probes \cite{Mitusinska2020} to sample the macromolecule's interior. The most known software that are able to perform such an analysis is \textit{trj\_cavity} \cite{Paramo2014} which is \textit{trj\_cavity} is a GROMACS plugin capable of identification both tunnels and cavities together with time-dependent calculations of their volume and solvent capacity. However, its functionality is focused on the global picture of the interior, and the analysis of particular tunnels or analysis of the flow between particular sites is difficult to access. Therefore, it is mostly used to analyze the size of the cavity and their volume change during the course of MD simulations \cite{Mitusinska2020}.
+In comparison to the methods described above, AQUA-DUCT provides an environment to analyze the whole protein interior including cavities and tunnels, allows the user a detailed description of the functionality of all identified tunnels and pathways, taking into account not only the time-evolution of tunnels and cavities geometry over time, but also the physico-chemical properties of particular amino acids lining the macromolecule's interior.
+On the other hand, several approaches emerged utilizing small organic molecules to sample the protein surface in order to identify binding sites and/or hot-spots. Methods such as Multiple Copy Simultaneous Search (MCSS) \cite{Miranker1991}, Multiple Protein Structure (MPS) \cite{Carlson1999,Lerner2008}, and  FTMap \cite{Brenke2009} use from three (MPS) up to sixteen (FTMap) different probes to map the protein surface and identify the most important regions. Moreover, the MPS method is able to convert the results from such a mapping into a pharmacophore model based on the type of probe that was found the most in a particular region. However, those methods did not include protein flexibility. Therefore, more sophisticated approach combining MD simulation and utilization of probe molecules was created. Such an approach incorporates protein flexibility and allows the protein to adapt to the presence of the probes. The selected probes have to compete with water molecules to occupy sites on the protein surface which are more “attractive” for them. The first cosolvent-based MD simulations were reported by Seco \textit{et al.} \cite{Seco2009}. They ran simulations of isopropanol and water at concentration of 20\% for at least 16 ns. Their approach was evaluated by its ability to reproduce the locations of isopropanol molecules located in Multiple Solvent Crystal Structures (MSCS) of thermolysin \cite{English2001}, p53 core domain \cite{Ho2006}, and elastase \cite{Mattos2006}. Guvench \& MacKerell \cite{Guvench2009} reported a technique called SILCS (Site-Identification by Ligand Competitive Saturation), which not only identifies the binding sites, but also creates a pharmacophore model, calculates free energy perturbation and samples occluded pockets in proteins. SILCS analysis were run using a 1M benzene and propane solution. Therefore, the authors used an artificial repulsive terms centered on dummy atoms in the center of benzene and the central carbon of propane to avoid aggregation of the hydrophobic cosolvents. Another approach, called the mixed-solvent MD (MixMD) \cite{Lexa2011}, was evaluated using the MSCS experiments. The authors ran five repetitions of 10 ns simulations with a 50\% concentration of acetonitrile to identify the binding site of the HEWL protein, and were able to recapture the binding location of acetonitrile. As it was shown here, the presented approaches utilizing additional small molecules as probes, were able to determine the binding sites and hot-spots located on the protein surface. In contrast, AQUA-DUCT traces water molecules and other additional small molecules within the structure of the analysed macromolecule and is able to determine binding sites and hot-spots located in this region. 
 
 AQUA-DUCT is an open-source Python software, designed for the analysis of macromolecules from the intramolecular voids perspective using small ligands as molecular probes. Key features of AQUA-DUCT include: i) identification of the functionally relevant tunnels, ii) statistical analysis of the solvent flow through tunnel network, iii) identification of structurally important residues and/or regions of macromolecules, iv) approximation of free energy profiles of transportation pathways, and v) an analysis of the evolution of the voids’ and hot-spots dynamics, based on the results of any molecular dynamics simulations. The software includes also script for results manipulation in PyMOL \cite{Delano2002} software as well as own graphical user interface (GUI) and a module for statistical data presentation. 
 
@@ -99,11 +101,11 @@ AQUA-DUCT is:
 \newline
 i) system independent - it enables the analysis of MD simulations generated by the most popular MD simulation software (i.e., AMBER, NAMD, GROMACS, and more), 
 \newline
-ii) ligands independent - it can trace flow of water, co-solvents, small ligands, or ions, also within one calculation, 
+ii) ligands independent - it can trace flow of water, cosolvents, small ligands, or ions, also within one calculation, 
 \newline
-iii) highly flexible - the user can adjust the areas of interests (i.e., the \emph{Scope} and \emph{Object}), determine which tunnels entrances to inspect, analyse single or multiple simulations, analyse whole simulations or only some interesting parts to examine the time evolution of the system. 
+iii) highly flexible - the user can adjust the areas of interests, determine which tunnels entrances to inspect, analyse single or multiple simulations, analyse whole simulations or only some interesting parts to examine the time evolution of the system. 
 
-Moreover, AQUA-DUCT enables time dependent/independent analysis which means that the user can use one software to get both the global statistic of your system as well as time dependent analysis (e.g., information about your system in different conformational states) together with the information about the time evolution of the system. As for our knowledge, AQUA-DUCT is one of the few software that can provide access to information vital for protein engineering and drug design during single analysis. The applicability of AQUA-DUCT software covers detailed analysis of small molecules transportation through protein, facilitation of protein re-engineering and drug design. 
+Moreover, AQUA-DUCT enables time dependent/independent analysis which means that the user can use one software to get both the global statistic of the system of interest as well as time dependent analysis (e.g., information about the system in different conformational states) together with the information about the time evolution of the system. As for our knowledge, AQUA-DUCT is one of the few software that can provide access to information vital for protein engineering and drug design during single analysis. It is able to detect, describe and compare tunnels' functionality based on the number of small molecules that were transported by a particular pathway. It also allows the user to calculate an approximation of transportation free energy profiles between pre-selected tunnels’ entries. The applicability of AQUA-DUCT software covers detailed analysis of small molecules transportation through protein, facilitation of protein re-engineering and drug design. It is also one of the few software which are capable of tracking water molecules and/or other small molecules within the macromolecule's structure. While most of the tools which are using additional cosolvents to map the protein surface, AQUA-DUCT is capable of tracking such molecules within the structure of the analysed macromolecule and provide maps of possible binding sites also within the macromolecule of interest. 
 
 \subsection{Scope}
 
@@ -172,7 +174,7 @@ The tutorials described in this article assume the user has installed Python 3, 
 
 Also, before the user starts running AQUA-DUCT on their own data, they should verify their trajectory files according to the undermentioned requirements:
 \begin{enumerate}
-\item The trajectory files should contain information on both macromolecule (e.g., protein) and ligand(s) (for example water molecules, ions, substrates, cosolvents etc.), otherwise it will be impossible to define \textit{Scope} and \textit{Object} and track molecules.
+\item The trajectory files should contain information on both the macromolecule (e.g., protein) and small molecule(s) (for example water molecules, ions, substrates, cosolvents etc.), otherwise it will be impossible to track molecules.
 \item The trajectory should have fixed periodic boundaries conditions and the protein should stay in the centre of the solvent box, otherwise it will be difficult to analyse the results and reach conclusions.
 \item The all rotational movements of the protein should be reduced. All the structures should be aligned to some reference to prevent them from rotation.
 \item The coordinates of the trajectory file should be saved sufficiently frequently in order to capture molecule movement properly. It is recommended that the coordinates are saved every picosecond (1 ps) for simulations shorter than 100 ns. Longer trajectories can have the coordinates saved less often to save disk space and time, however users should try to keep ratio 1 ps/100 ns and not exceed 5 ps sampling.
@@ -181,7 +183,9 @@ Also, before the user starts running AQUA-DUCT on their own data, they should ve
 
 \subsection{Background knowledge}
 
-AQUA-DUCT is a tool intended for analysis of small molecules flow during the course of molecular dynamic simulations using MDAnalysis \cite{Michaud-Agrawal2011} package for reading, parsing and searching of MD trajectory data. Therefore, it is assumed that the user already has the knowledge of classical MD and is able to perform MD simulations. The tutorials are based on three sets of sample data provided at  \url{http://www.aquaduct.pl/user-guide/}, however, in order to use  AQUA-DUCT for one’s own analysis, the user has to be able to prepare MD data on their own. The authors prepared three data sets consisting of 10 ns MD simulation of mouse or human epoxide hydrolase with water molecules or in a mixture of water molecules and acetonitrile molecules, which should be used in particular tutorial (sample data \#1, sample data \#2, and sample data \#3). What is more, the MD simulation for analysis should contain information on both scope of interest (e.g., protein, protein-protein complexes, protein-RNA complexes etc.) and ligand(s) (for example water molecules, ions, substrates, cosolvents etc.). Otherwise, it will be impossible to define \textit{Scope} and \textit{Object} and track molecules and perform AQUA-DUCT analysis. These tutorials cannot be comprehensive in explaining all elements on how to prepare MD simulations with ligands or solvents, therefore, the user is expected to seek outside resources and tools (\cite{Mitusinska2020}, \href{https://ambermd.org/tutorials/}{Amber tutorials}, \href{http://www.mdtutorials.com/gmx/}{GROMACS tutorials} etc.). 
+AQUA-DUCT is a tool intended for analysis of small molecules flow during the course of molecular dynamic simulations using MDAnalysis \cite{Michaud-Agrawal2011} package for reading, parsing and searching of MD trajectory data. Therefore, it is
+assumed that the user already has the knowledge of classical MD and is able to perform MD simulations. It is also assumed that the user is able to prepare their files, mainly the trajectory file in a specific way: that the macromolecule is positioned in the center of the water box and the information about the small molecules is also stored, the rotational movements are removed, and the macromolecule's structure is aligned to a reference structure. Moreover, it is also assumed that the coordinates of the trajectory file are saved every 1 ps to efficiently sample the macromolecule's interior (for simulations longer than 100 ns the authors recommend saving the coordinates every 5 ps). Without this level of MD simulation the user will still be able to run AQUA-DUCT analysis on a prepared set of sample data files, however it will be difficult for them to run such an analysis using their own data.
+The tutorials are based on three sets of sample data provided at  \url{http://www.aquaduct.pl/sample-data/}, however, in order to use  AQUA-DUCT for one’s own analysis, the user has to be able to prepare MD data on their own. The authors prepared three data sets consisting of 10 ns MD simulation of mouse or human epoxide hydrolase with water molecules or in a mixture of water molecules and acetonitrile molecules, which should be used in particular tutorial (sample data \#1, sample data \#2, and sample data \#3). What is more, the MD simulation for analysis should contain information on both scope of interest (e.g., protein, protein-protein complexes, protein-RNA complexes etc.) and ligand(s) (for example water molecules, ions, substrates, cosolvents etc.). Otherwise, it will be impossible to define \textit{Scope} and \textit{Object} and track molecules and perform AQUA-DUCT analysis. These tutorials cannot be comprehensive in explaining all elements on how to prepare MD simulations with ligands or solvents, therefore, the user is expected to seek outside resources and tools (\cite{Mitusinska2020}, \href{https://ambermd.org/tutorials/}{Amber tutorials}, \href{http://www.mdtutorials.com/gmx/}{GROMACS tutorials} etc.). 
 
 The tutorials presented in this article show how to run calculations \textit{via} AQUA-DUCT GUI and also \textit{via} commands provided. The user does not need to know Unix commands in order to run the calculations but some basic knowledge would be beneficial. Program and file names are written in \texttt{monospace font} in the text to distinguish them from the narrative. The commands that are to be issued by the user are similarly written in \texttt{monospace font}. Some commands are long and span multiple lines; in these cases the commands should not be entered on separate lines in the command line, rather as one continuous command. 
 Moreover, because of the way this document is compiled, the user should be aware that the copied commands may lack or otherwise contain incorrect whitespace or punctuation characters, and care should be taken to ensure that command components are to be separated with spaces, and compared visually to the document.
@@ -203,14 +207,16 @@ While AQUA-DUCT should work on every machine on which it is successfully install
 
 \section{Content and links}
 
-The tutorials similar to the ones described in this article can be also accessed as a User Guide at \href{http://www.aquaduct.pl/}{http://www.aquaduct.pl/} along with sample data necessary for completing each tutorial.
+Sample data which are necessary for completing each tutorial described below (sample data \#1 - \#3) are available to access at \url{http://www.aquaduct.pl/sample-data/}. One can also find there a User Guide that uses the sample data \#1 and covers some aspects of the analyses presented in the tutorials described in the following article. Although the User Guide available on the website is simplified compared to the tutorials described below, it also consists of the detailed instructions about how to use the GUI Valve Configurator. The authors recommend following the User Guide prior to this tutorials for those users who find it difficult to navigate in the GUI Valve Configurator using only text instructions. 
 
-Additional tutorials, such as tutorial on clustering of inlets \href{http://www.aquaduct.pl/clustering/}{Clustering}, trimming paths \href{http://www.aquaduct.pl/trimming-paths/}{Trimming paths} or smoothing of paths \href{http://www.aquaduct.pl/smoothing-paths/}{Smoothing paths} can be found at AQUA-DUCT website \url{http://www.aquaduct.pl/} under the \textbf{Tutorials} tab.
+The AQUA-DUCT website comprises also a Tutorials tab (\url{http://www.aquaduct.pl/tutorials/}) where one can find some more advanced tutorials, called Tips\&Tricks. The Tips\&Tricks are focused on more technical aspects on some parts of AQUA-DUCT calculations. One can use them during preparation of the configuration file. The topics of Tips\&Tricks are as follows: clustering of inlets \href{http://www.aquaduct.pl/clustering/}{Clustering}, trimming paths \href{http://www.aquaduct.pl/trimming-paths/}{Trimming paths} or smoothing of paths \href{http://www.aquaduct.pl/smoothing-paths/}{Smoothing paths}.
+
+There is also a video recording of a conducted AQUA-DUCT webinar available at \url{http://www.aquaduct.pl/webinar/}.
 
 \section{Overview}
-The following Tutorials will be done using three sets of sample data: data set \#1 of 10 ns MD simulation of mouse soluble epoxide hydrolase (msEH, PDB id: 1cqz) inside a TIP3P water box, data set \#2 of 10 ns MD simulation of human soluble epoxide hydrolase (hsEH, PDB id: 1s8o) inside a TIP3P water box, and an additional \texttt{frames} directory which is used during the time-window mode analysis described in Tutorial 5, and data set \#3 of 10 ns MD simulation of human soluble epoxide hydrolase inside a box containing TIP3P water molecules in a mixture with acetonitrile molecules. All data sets consist of 2,000 frames (10 ns saved each 5 ps). Sample data are available at \url{http://www.aquaduct.pl/user-guide/}. Every time a~particular data set is used, it is marked in the tutorial.
+The following Tutorials will be done using three sets of sample data: data set \#1 of 10 ns MD simulation of mouse soluble epoxide hydrolase (msEH, PDB id: 1cqz) inside a TIP3P water box, data set \#2 of 10 ns MD simulation of human soluble epoxide hydrolase (hsEH, PDB id: 1s8o) inside a TIP3P water box, and an additional \texttt{frames} directory which is used during the time-window mode analysis described in Tutorial 5, and data set \#3 of 10 ns MD simulation of human soluble epoxide hydrolase inside a box containing TIP3P water molecules in a mixture with acetonitrile molecules. All data sets consist of 2,000 frames (10 ns saved each 5 ps). Sample data are available at \url{http://www.aquaduct.pl/sample-data/}. Every time a~particular data set is used, it is marked in the tutorial.
 
-The soluble epoxide hydrolases are relatively small proteins with the active site buried in the protein core, and tutorials themselves will analyse tracking movement of water molecules that have passed through the protein active site during the simulation. While the tutorials assume usage of included GUI to set up AQUA-DUCT calculations, all steps presented can be achieved through the command line, mostly through editing the generated (or created from scratch) configuration file.
+The soluble epoxide hydrolases are relatively small proteins with the active site buried in the protein core. Here, we would like to present the workflow of the analysis of the tracking movement of small molecules, that have passed through the protein active site during the simulation. The tutorials are divided into two parts: i) basic analysis of water molecules movements within the enzyme's active site (tutorials 1-3), and ii) advanced analysis based on the local solvent distribution approach (tutorials 4-6). For the first three tutorials the authors will encourage the users to use the included GUI (Graphical User Interface), the GUI Valve Configurator, the latter tutorials will present the user how to generate (or create from scratch) and edit the configuration file.
  
 \subsection{Dictionary}
 
@@ -219,7 +225,7 @@ In this section are resolved some of the terms used in AQUA-DUCT software that t
 \begin{figure*}[ht!]
 \centering
 \includegraphics[width=\textwidth]{dictionary.png}
-\caption{A graphical representation of terms used during AQUA-DUCT analysis: A) \emph{Scope}, \emph{Object}, cluster, inlet, and an example of a path, and B) selected single raw path, selected single smooth path (the same one as the raw one, but smoothed), all paths between \texttt{cluster\_1} and \texttt{cluster\_2}, and master path \texttt{1\_2}.}
+\caption{A graphical representation of terms used during AQUA-DUCT analysis: A) \emph{Scope} (purple), \emph{Object} (orange), cluster (color coded groups of spheres), inlet (any single sphere), and an example of a path (blue, red and green lines), and B) selected single raw path, selected single smooth path (the same one as the raw one, but smoothed), all paths between \texttt{cluster\_1} and \texttt{cluster\_2}, and master path \texttt{1\_2}.}
 \label{Dict}
 \end{figure*}
 
@@ -227,13 +233,13 @@ In this section are resolved some of the terms used in AQUA-DUCT software that t
 \item \textbf{\textit{valve}} is a driver that uses \textit{aquaduct} module to perform analysis of trajectories of selected residues in MD simulation.
 \item \textbf{\textit{pond}} is a driver that uses \textit{aquaduct} module to perform further analysis of results from \textit{valve} calculations.
 \item \textbf{\textit{kraken}} is a small application that helps to gather and visualize all quantitative results from AQUA-DUCT.
-\item \textbf{\textit{Configuration file}} is a text file containing all necessary information needed to launch the AQUA-DUCT calculations. It can be prepared with AQUA-DUCT GUI Valve Configurator or it can be prepared with a template file that can be printed by \textit{valve}.
+\item \textbf{\textit{Configuration file}} is a text file containing all necessary information needed to launch the AQUA-DUCT calculations. It can be prepared with AQUA-DUCT GUI Valve Configurator or can be prepared with a template file that can be printed by \textit{valve}.
 \item \textbf{\textit{Object}} is an area of greatest interest, only molecules which passed through \textit{Object} are traced. \textit{Object} should define residues to trace and spatial boundaries of the \textit{Object} site. The purpose of this space is to limit the number of tracked molecules to pathways of particular interest - this means gathering molecule movement data only relating to a particular space in the macromolecule, and by consequence, a pathway.
 \item \textbf{\textit{Scope}} is an area within the analysed system inside which selected molecules should be traced. \textit{Scope} can be defined in two ways: as \textit{Object} but with broader boundaries or as the \href{https://tunneling-group.github.io/aqua-duct/valve/valve_manual.html?highlight=convex\%20hull#convex-hulls-of-macromolecule-atoms}{convex hull} of selected molecular object, e.g., protein.
 \item \textbf{\textit{Inlet}} is a graphical representation of the point in which a traced molecule entered or left the defined \textit{Scope}. Inlets are then grouped into clusters.
 \item \textbf{\textit{Cluster}} is a collection of inlets that represents entry/exit location to/from the system which was simulated during the MD simulation. In AQUA-DUCT, clusters simply mean particular tunnels entry/exits.
 \item \textbf{\textit{Traced molecules}} are user-defined type of molecules (such as water molecules, cosolvents, ligands or other small molecules) which passed through the defined \textit{Object} during the simulation time and therefore are traced and further analysed.
-\item \textbf{\textit{Traceable residues}} is a list of all traced residues.
+\item \textbf{\textit{Traceable residues}} is a section of the configuration file in which the user defines the list of molecule's types they want to track. 
 
 \item \textbf{\textit{Path}} is a visualization of a traced molecule's trajectory within the defined \textit{Scope} and \textit{Object}. Paths are coloured as follows:
 red - traced molecule entered \textit{Scope} and is heading to the \textit{Object}
@@ -251,21 +257,54 @@ blue - traced molecule left the \textit{Object} and is heading to leave the \tex
 \item \textbf{\textit{Cosolvent}} is defined in this tutorial as any low molar mass chemical compound that may be (at least moderately) mixed with water. Cosolvents may act as small molecular probes, similarly as water molecules, penetrating the internal structure of the protein. Since cosolvents have different physico-chemical properties than water molecules, it allows the user to analyse different properties and penetrate different regions of the analysed macromolecule.
 \end{itemize}
 
-\subsection{Tutorial 1: Basic solvent transportation analysis}
-For all Tutorials published here the authors have prepared three samples of training data. They also encourage the users to create 
-separate directories for particular data sets. Therefore, the authors recommend the users to navigate to the directory they would like to use as a working directory and create a \texttt{Tutorial} directory. Within, it is recommended to create a directory for this (and a number of others using the same data) tutorial. 
+\subsection{How to use AQUA-DUCT?}
 
-For this tutorial, the user should create \texttt{1\_basic\_analysis} working directory. Here, the user will use a set of MD simulations data
-- \href{http://www.aquaduct.pl/user-guide/}{sample data \#1} which comprises of topology and trajectory files of mouse soluble epoxide hydrolase in a water box.
+AQUA-DUCT's Valve module is launched either through graphical or command line interfaces. Both methods require setup of a configuration file (config file).
+
+While AQUA-DUCT's configuration files can be easily obtained and edited using the any text editing utility, including CLI tools, the software also includes a user-friendly GUI Valve Configurator, which handles generation of configuration files. Moreover, GUI Valve Configurator is also helpful for the new users, since it shows the information on how to fill a particular field of the configuration file or what does a particular option do. Therefore, for the first three tutorials we will encourage the users to use the GUI Valve Configurator. To distinguish between commands executed in the terminal, we will mark the names of the tabs and options of the GUI Valve Configurator in \textit{italics}, while the terminal commands will be written in \texttt{monotype font}.
 
 To launch AQUA-DUCT GUI Valve Configurator the user should use the command:
 \begin{lstlisting}
 valveconfig_run
 \end{lstlisting}
-Within the GUI Valve Configurator one can either prepare a configuration file from scratch or load an existing one. 
-For this tutorial, select the Easy configuration level. The Easy level of the GUI Valve Configurator consists of 3 tabs that correspond to the essential steps of AQUA-DUCT calculations: \textit{Initial step}, \textit{Clustering} and \textit{Visualization}.
-Firstly, in the \textit{Initial step} tab, a topology file and trajectory files must be provided: this can be done either through file selection menu ("Load") or through inputting a path to the file. The path can be either absolute or relative to the directory from which the program was launched. AQUA-DUCT supports multiple topology and trajectory file formats including XPDB, MMTF, PRMTOP, TOP, PSF, PDBQT, MOL2, PQR, TRP, CRD, PARM7, GRO, XYZ, PDB for topology and CRD, MDCRD, XPDB, DCD, NC, NetCDF, TRJ, CRDBOX, TRZ, GRO, TRR, PDB, LAMMPS, MMTF, RESTRT, XTC for trajectory formats. For more information on available files formats please look at \href{https://www.mdanalysis.org/docs/documentation_pages/topology/init.html}{MDAnalysis documentation - Topology} and \href{https://www.mdanalysis.org/docs/documentation_pages/coordinates/init.html}{MDAnalysis documentation - Trajectory}. Also, setting the \texttt{cache} option by providing a path to a cache directory is advised, where AQUA-DUCT will store essential files for the calculations.
 
+\begin{figure*}[ht!]
+\centering
+\includegraphics[width=0.85\textwidth]{GUI.png}
+\caption{Screenshots of the GUI Valve Configurator windows. A) The GUI Valve Configurator window with two boxes: \textit{Configuration file} and \textit{Configuration level}. B) The Easy level of the configuration file editing with three tabs: \textit{Initial}, \textit{Clustering} and \textit{Visualize}. C) The Normal level of the configuration file editing with five tabs: \textit{General options}, \textit{Tracking}, \textit{Inlets clustering}, \textit{Clustering} and \textit{Visualization}. D) The Expert level of the configuration file with nine tabs, reflecting the structure of a plain text configuration file: \textit{General options}, \textit{Traceable residues}, \textit{Raw paths}, \textit{Separate paths}, \textit{Inlets clustering}, \textit{Clustering}, \textit{Reclustering}, \textit{Analysis}, and \textit{Visualize}.}
+\label{GUI}
+\end{figure*}
+
+The GUI Valve Configurator window comprises of two boxes: \textit{Configuration file} and \textit{Configuration level}. The first box allows the user load an existing (created previously by the user or downloaded from the AQUA-DUCT's website) configuration file (\textit{Load config}) or create a new configuration file (\textit{New config}). There are three levels of the configuration file generation:
+\begin{itemize}
+\item{Easy level} which consists of only three tabs: \textit{Initial}, \textit{Clustering}, and \textit{Visualization}, allows the users to run basic analysis of small molecules movements. The Easy level of the configuration file editing allows the user to set the basic AQUA-DUCT calculations.
+\item{Normal level} which consists of five tabs: \textit{General options}, \textit{Tracking}, \textit{Inlets clustering}, \textit{Clustering}, and \textit{Visualize}, allows the users to run both basic and advanced analysis (such as hot-spots identification, as shown in Tutorial 4).
+\item{Expert level} which consists of nine tabs, reflecting the structure of a plain text configuration file: \textit{General options}, \textit{Traceable residues}, \textit{Raw paths}, \textit{Separate paths}, \textit{Inlets clustering}, \textit{Clustering}, \textit{Reclustering}, \textit{Analysis}, and \textit{Visualize}. This mode of the configuration file editing will not be discussed in this tutorial.
+\end{itemize}
+
+The AQUA-DUCT analysis is presented step-by-step in the following tutorials. The tutorials will also explain the selected options. The users will be using only the Easy and Normal levels of configuration file editing, since they comprise the necessary options. The Expert level of configuration file editing comprise of all available options and will not be described in this tutorials.
+
+\subsection{Tutorial 1: Basic solvent transportation analysis}
+For all Tutorials published here the authors have prepared three samples of training data. They also encourage the users to create 
+separate directories for particular data sets. Therefore, the authors recommend the users to navigate to the directory they would like to use as a working directory and create a \texttt{Tutorial} directory. Within, it is recommended to create a directory for this (and a number of others using the same data) tutorial. 
+
+For this tutorial, the user should create \texttt{1\_basic\_analysis} working directory. Here, the user will use a set of MD simulations data
+- \href{http://www.aquaduct.pl/sample-data/}{sample data \#1} which comprises of topology and trajectory files of mouse soluble epoxide hydrolase in a water box.
+
+\subsubsection{Open the GUI Valve Configurator}
+To launch AQUA-DUCT GUI Valve Configurator the user should use the command:
+\begin{lstlisting}
+valveconfig_run
+\end{lstlisting}
+Within the GUI Valve Configurator one can either prepare a configuration file from scratch or load an existing one. 
+For this tutorial, select the \textit{Easy} configuration level. The \textit{Easy} level of the GUI Valve Configurator consists of 3 tabs that correspond to the essential steps of AQUA-DUCT calculations: \textit{Initial step}, \textit{Clustering} and \textit{Visualization}.
+
+\subsubsection{Load the topology and trajectory files}
+Firstly, in the \textit{Initial step} tab, a topology file and trajectory files must be provided: this can be done either through file selection menu (\textit{Load}) or through inputting a path to the file. The path can be either absolute or relative to the directory from which the program was launched. AQUA-DUCT supports multiple topology and trajectory file formats including XPDB, MMTF, PRMTOP, TOP, PSF, PDBQT, MOL2, PQR, TRP, CRD, PARM7, GRO, XYZ, PDB for topology and CRD, MDCRD, XPDB, DCD, NC, NetCDF, TRJ, CRDBOX, TRZ, GRO, TRR, PDB, LAMMPS, MMTF, RESTRT, XTC for trajectory formats. For more information on available files formats please look at \href{https://www.mdanalysis.org/docs/documentation_pages/topology/init.html}{MDAnalysis documentation - Topology} and \href{https://www.mdanalysis.org/docs/documentation_pages/coordinates/init.html}{MDAnalysis documentation - Trajectory}. Also, setting the \textit{cache} option by providing a path to a cache directory is advised, where AQUA-DUCT will store essential files for the calculations.
+
+In the first tab, \textit{Initial}, the user needs to set the paths to their topology and trajectory files, then define the \emph{Scope} and \emph{Object} as it was shown above, and set the \textit{Auto Barber} option to \texttt{protein}. Then, the user can switch to \textit{Clustering} tab.
+
+\subsubsection{Define the \emph{Scope} and \emph{Object} for tracking}
 The first tutorial aims to explain how to access information about the space which is penetrated by solvent molecules. During the course of molecular dynamics simulations, small molecules, such as solvent molecules, ligands or ions, are able to penetrate the macromolecule's cavities, and therefore they are used by AQUA-DUCT as a molecular probe. Each small molecule may enter and/or leave the macromolecule's interior many times, therefore for the clarity of the results, AQUA-DUCT filters the flow of analysed small molecules by applying two regions of particular interest. The first region of interest is called the \emph{Scope} and it represents the region within which small molecules are traced. The second region, the \emph{Object}, represents the cavity of particular interest, such as the enzyme's active site, cofactor's cavity, or some other cavity of the user's interest, which the small molecule must visit to be traced. Therefore it is very important to place the \emph{Object} within the \emph{Scope}. 
 
 Since this tutorial is focused on tracking water molecules inside the whole protein, the \textit{Scope} needs to be set to \texttt{protein}. The  definition  of \textit{Object} is somehow more complicated and consists of two essential pieces of information: the name of tracked molecules (e.g., water, other solvent, ions, or combination of several different small molecules) and the space which they must visit to be tracked, e.g., the active site, binding cavity or some other pocket. To learn more about the selection queries please see the \href{https://www.mdanalysis.org/docs/documentation_pages/selections.html}{MDAnalysis documentation - Selection} section. In this tutorial the \emph{Object} definition will be set as water molecules (\texttt{resname WAT}) within 6 Å sphere of the centre of geometry defined by active site amino acids (residues 99, 147, 231, 261 and 289) which approximates the active site pocket:
@@ -273,13 +312,14 @@ Since this tutorial is focused on tracking water molecules inside the whole prot
 (resname WAT) and (sphzone 6.0 (resnum 99 or resnum 147 or resnum 231 or resnum 261 or resnum 289))
 \end{lstlisting}
 
-When AQUA-DUCT tracks a molecule, information about that molecule is stored as a \emph{path}. A \emph{path} shows where the molecule of interest has entered the \emph{Scope}, visited the \emph{Object} (or left the Object and entered it again etc.) and left the \emph{Scope}. If the molecule of interest have entered and left the protein, the beginning and the end of each path are marked by inlets. Later, during the clustering stage, those inlets are grouped into clusters, which will have individual ids. Within \texttt{valve} results, paths are typically identified by its starting and ending point, using cluster ids in an start-finish format (e.g 1-1, 2-1 or 2-N). Sometimes the path could end inside the area of interest, i.e. inside the \emph{Scope}. Some paths may also begin inside the \emph{Scope}, depending on starting simulation conditions. Such path starting and ending points are marked as N. This will be discussed further, during the analysis stage. As a rule of thumb, it is desirable for inlets (and by extension, path starting and ending points) to stay on the protein’s surface. This way they can be effectively used to mark the tunnels’ entrances. This, however is not always the case right after second stage of \emph{valve} calculations, so for this purpose \emph{AutoBarber} is used to trim the pathways so they align with protein surface. AQUA-DUCT uses the \href{https://tunneling-group.github.io/aqua-duct/valve/valve_manual.html?highlight=paths#convex-hulls-of-macromolecule-atoms}{ConvexHull} approximation to describe the protein’s surface. As a consequence of that the inlets usually flow beyond the protein’s surface and are widely dispersed. \emph{AutoBarber} cuts the paths to fit them into the protein’s surface. The user can define the level of path trimming. Typically when \textit{AutoBarber} is set to \texttt{protein}, the paths will be longer than when it is set \texttt{backbone}, while if it is set to \texttt{name CA} the paths will be the shortest. For more detailed information please see the \href{http://www.aquaduct.pl/trimming-paths/}{Trimming paths Tutorial} on the AQUA-DUCT website.
+\subsubsection{Set AutoBarber and trimming paths options}
+When AQUA-DUCT tracks a molecule, information about that molecule is stored as a \emph{path}. A \emph{path} shows where the molecule of interest has entered the \emph{Scope}, visited the \emph{Object} (or left the \emph{Object} and entered it again etc.) and left the \emph{Scope}. If the molecule of interest have entered and left the protein, the beginning and the end of each path are marked by inlets. Later, during the clustering stage, those inlets are grouped into clusters, which will have individual ids. Within \texttt{valve} results, paths are typically identified by its starting and ending point, using cluster ids in an start-finish format (e.g. 1-1, 2-1 or 2-N). Sometimes the path could end inside the area of interest, i.e. inside the \emph{Scope}. Some paths may also begin inside the \emph{Scope}, depending on starting simulation conditions. Such path starting and ending points are marked as N. This will be discussed further, during the analysis stage. As a rule of thumb, it is desirable for inlets (and by extension, path starting and ending points) to stay on the protein’s surface. This way they can be effectively used to mark the tunnels’ entrances. This, however is not always the case right after second stage of \emph{valve} calculations, so for this purpose \emph{AutoBarber} is used to trim the pathways so they align with protein surface. AQUA-DUCT uses the \href{https://tunneling-group.github.io/aqua-duct/valve/valve_manual.html?highlight=paths#convex-hulls-of-macromolecule-atoms}{ConvexHull} approximation to describe the protein’s surface. As a consequence of that the inlets usually flow beyond the protein’s surface and are widely dispersed. \emph{AutoBarber} cuts the paths to fit them into the protein’s surface. The user can define the level of path trimming. Typically when \textit{AutoBarber} is set to \texttt{protein}, the paths will be longer than when it is set \texttt{backbone}, while if it is set to \texttt{name CA} the paths will be the shortest. For more detailed information please see the \href{http://www.aquaduct.pl/trimming-paths/}{Trimming paths Tutorial} on the AQUA-DUCT website.
 
-In the first tab, \textit{Initial}, the user needs to set the paths to their topology and trajectory files, then define the \emph{Scope} and \emph{Object}, and set the \textit{Auto Barber} option to \texttt{protein}. Then, the user can switch to \textit{Clustering} tab.
-
+\subsubsection{Set clustering options}
 Possibly the most challenging part of AQUA-DUCT calculations involve clustering the inlets. Typically it is desired to group entering molecules by the tunnel entrance they enter the protein through. If the protein has more tunnels we can separate them, and see how often each of them is used. The AQUA-DUCT provides user full flexibility how to group the clusters together to answer each possible question focused on solvent flow through the protein interior.  
 For first-time use the authors recommend using the \texttt{barber} method, and setting \emph{auto\_barber} to \texttt{protein}, and leave the other options default. This method will provide the user with the first glance of the system of interest and the water paths network. The \emph{AutoBarber} procedure works here in a similar manner that it is during in the previous step, but that does not mean that the same set of settings needs to be used. The available combination of \emph{AutoBarber} settings for trimming paths are available at the AQUA-DUCT website in the \href{http://www.aquaduct.pl/trimming-paths/}{Trimming paths Tutorial}.
 
+\subsubsection{Set visualization options}
 The last step before finally running AQUA-DUCT is the visualization. This is done from the \textit{Visualize} tab. Here, the user defines specifically what aspects of calculations they want to visualize. Since the  molecule, \emph{Scope}, \emph{Object} and clusters are subjects of this analysis, they should be selected. Since this part of the tutorial is focused on different types of paths, the user is encouraged to choose all of the available options. It is recommended to change the \emph{Object} definition to \texttt{(resname *) and (sphzone 6.0 (resnum 99 or resnum 147 or resnum 231 or resnum 261 or resnum 289))} replacing the small molecules type by an asterisk (*) for the visualization clarity.
 
 \begin{Checklists}
@@ -290,14 +330,16 @@ The visualization file (PyMOL session) can be really large, when the user wants 
 \end{checklist}
 \end{Checklists}
 
-With the configuration ready, the configuration file should be saved (\emph{File > Save As}). Once it is saved, the user can begin through selecting \emph{Run > Valve}, within the Run window. It is also possible to select the maximum number of threads used (leaving the option empty uses all available threads) and launch options. It is recommended for the user to use the \textit{Debug absolute file path} to ensure that a log file will be created and all the information on the calculations will be saved to this file. Once the \textit{Config absolute file path} and \textit{Debug absolute file path} are provided, the user should see in the Run Valve window a below information: 
+\subsubsection{Save the configuration file and run the calculations}
+With the configuration ready, the configuration file should be saved (\emph{File > Save As}). Once it is saved, the user can begin through selecting \emph{Run > Valve}, within the Run window. It is also possible to select the maximum number of threads used (leaving the option empty uses all available threads) and launch options. It is recommended for the user to use the \textit{Debug absolute file path} to ensure that a log file will be created and all the information on the calculations will be saved to this file. Once the \textit{Config absolute file path} and \textit{Debug absolute file path} are provided, the user should see in the \textit{Run Valve} window a below information: 
 \begin{lstlisting}
 valve_run -c /home/username/Tutorial/1_basic_analysis/config.txt --debug-file /home/username/Tutorial/1_basic_analysis/aq.log
 \end{lstlisting}
 where \texttt{/home/username/Tutorial/1\_basic\_analysis} means the actual working directory where the user is running this tutorial and the sample data set.
 If the option \texttt{-{}-debug-file} is used, AQUA-DUCT will create a file that contains a record of all AQUA-DUCT calculations and information about possible errors. 
-Now the user can press "Run" button to begin the calculations. 
+Now the user can press \textit{Run} button to begin the calculations. 
 
+\subsubsection{Visualize the results}
 After the AQUA-DUCT calculations finish (such calculations take approx. 8 minutes on an Intel Core i7-4790 CPU @ 3.60 GHz machine), the user will get some files which store results from each stage of the analysis:
 
 \begin{enumerate}
@@ -307,13 +349,13 @@ After the AQUA-DUCT calculations finish (such calculations take approx. 8 minute
 \end{enumerate}
 
 AQUA-DUCT handles the visualization of the results by using PyMOL. The easiest way to preview the results is to use the \texttt{6\_visualize\_results.py} script.
-The script for visualization has a set of arguments that allows the user to decide which items they want to see in their PyMOL session, change colours of some objects or automatically save their generated visualization as a PyMOL session (Figure \ref{Tut1.1}), among others. All functionality can be viewed using:
+The script for visualization has a set of arguments that allows the user to decide which items they want to see in their PyMOL session, change colours of some objects or automatically save their generated visualization as a PyMOL session (Figure \ref{Tut1.1}), among others. All functionality can be viewed by typing the below command in the terminal:
 \begin{lstlisting}
 python 6_visualize_results.py --help
 \end{lstlisting}
 Furthermore, all usable arguments are listed within \href{https://tunneling-group.github.io/aqua-duct/valve/valve_manual.html?highlight=visualize\%20results#visualization}{documentation}.
 
-To launch the script use:
+To launch the script use in the terminal:
 \begin{lstlisting}[columns=fullflexible]
 python 6_visualize_results.py --keep 'molecule cluster scope object raw'  --discard  'master io all paths'
 \end{lstlisting}
@@ -328,6 +370,7 @@ The user should pay particular attention to copying commands from these tutorial
 
 Using this command, the user is omitting the smooth paths and many more items AQUA-DUCT is capable of visualising. This visualization will be used to verify how appropriate clustering results are - using all visualization options can potentially take more time than needed and as such for this purpose \texttt{-{}-keep} and \texttt{-{}-discard} options are used to only keep elements that are of interest: the molecule, \textit{Scope}, \textit{Object}, clusters and raw paths. While \texttt{-{}-keep} works as one would expect, only keeping specified elements and discarding the others, using \texttt{'raw'} argument will also keep such elements as \texttt{'raw\_master\_paths'} or \texttt{'all\_raw\_in'}. For this reason \texttt{-{}-discard} option is also used as shown. 
 
+\subsubsection{Summary}
 This part of the tutorial ends with looking at the visualization of the AQUA-DUCT results (Figure \ref{Tut1.1}) and assessing the quality of the conducted clustering of inlets. The purple shape represents the \emph{Scope} and the orange stands for the \emph{Object}, inlets are shown as small spheres, and only raw paths are shown for the picture clarity. When examining the correctness of clustering method used, it is important to focus on how the pathways and inlets are positioned on the protein's surface. The clusters of inlets should be disabled in PyMOL and only the raw paths should be used to identify the potential entrances to the \textit{Object}. The red (Incoming) and blue (Outgoing) parts of paths represent the flow of the traced molecules, and therefore their positions on the protein's surface reflect the shape and the size of the potential entrances/exits, as well as their connection with the \textit{Object} cavity. Therefore, they also reflect the shape and size of tunnels leading to the active site. In Figure \ref{Tut1.1} there are four visible entries to the active site pocket (marked with arrows), each of them picture a particular tunnel connecting the enzyme's active site with the environment. To analyse how often the identified tunnels are used, a proper clustering of the inlets is required. The position of the inlets clusters should overlap with the entries/exits to the protein. Tutorial~2 shows how to conduct multi-level clustering using AQUA-DUCT's GUI Valve Configurator to properly divide the big \texttt{cluster\_1} into four smaller clusters, reflecting the positions of entrances/exits to the enzyme's active site.
 
 \subsection{Tutorial 2: Advanced solvent transportation analysis: multi-level clustering and visualization tips}
@@ -340,19 +383,22 @@ python 6_visualize_results.py --keep 'molecule cluster scope object raw' --disca
 \end{lstlisting}
 and show the protein as surface using PyMOL options.
 
+\subsubsection{Re-run inlets clustering}
 The user should now be able to see four regions where the raw paths are entering and/or leaving the protein's surface (marked with arrows in Figure \ref{Tut1.1}B. To be able to analyse each entrance/exit separately, the user need to divide the big \texttt{cluster\_1} into four separate clusters indicating particular entries. Then, they will be able to access detailed information on the direction of small molecules flow, the length of pathways passing through each entry, the possibility of such a passage, etc. In this tutorial the user will use the GUI Valve Configurator to modify their first configuration file in order to add some more clustering steps. 
 
 Since now the user wants to repeat only the clustering stage, they do not have run the calculations from the three previous steps again. The authors are aware that in some cases, such as long simulations of a protein which is visited by a large number of small molecules, the calculation may take a while. Therefore for every stage of the AQUA-DUCT calculations there is an \textit{execute} option which can be set to \texttt{runonce}, \texttt{run} and \texttt{skip}. The default setting here is \texttt{runonce} which allows AQUA-DUCT to search for a previously generated \texttt{.dump} file and load the results from the \texttt{.dump} file. When it is set to \texttt{run}, the calculations are run, overriding the previously generated \texttt{.dump} files. If it is set to \texttt{skip} the calculations are skipped and if the corresponding \texttt{.dump} file exists, it is loaded. However, it is recommended in this step to create a new directory to copy the previously generated files.
 
 To keep all the data and avoid overwriting the files in next runs of calculations, we recommend the user to copy the \texttt{4\_inlets\_clustering\_data.dump}, \texttt{5\_analysis\_results.txt}, \texttt{5\_analysis\_results.txt.csv}, \texttt{6\_visualize\_results.py}, and \texttt{6\_visualize\_results.tar.gz} files from the previous run and store them in a separate directory, called for example \texttt{run\_1}. After each calculations the user is encouraged to create a new directory in which they will keep the previously generated files.
 
+\subsubsection{Open the GUI Valve Configurator}
 First, the user needs to type in the command line:
 \begin{lstlisting}
 valveconfig_run
 \end{lstlisting}
-and then use the \textbf{Load Config} button to browse files and select the previously generated \texttt{config.txt} file, chose the Normal level of the configuration file editing and click \textbf{Forward} button. Now they should see five tabs: \textit{General options}, \textit{Tracking}, \textit{Inlets clustering}, \textit{Clustering}, and \textit{Visualization}.
+and then use the \textit{Load Config} button to browse files and select the previously generated \texttt{config.txt} file, chose the \textit{Normal} level of the configuration file editing and click \textbf{Forward} button. Now they should see five tabs: \textit{General options}, \textit{Tracking}, \textit{Inlets clustering}, \textit{Clustering}, and \textit{Visualization}.
 
-A new recursive clustering section can be added in the fourth tab, \textit{Clustering}, by clicking on the \textbf{Add clustering section} button. Above this button, a \textit{Recursive clustering} option is visible. The value of this option (default being "clustering") points to the name of the next clustering section which should be added next. After clicking the button, the user will see another box titled "Recursive clustering" inside which the first field is \textit{Name}. This is the name that the first \textit{Recursive clustering} field should point to - their values should be the same name. The \textit{Name} of a newly added section will be "clustering0" by default. Here, the first \textit{Recursive clustering} field needs to be adjusted accordingly to "clustering0". This is indicating that clustering section of this name is to be executed as part of the recursive clustering. Should the user add more recursive clustering sections, each previous recursive clustering sections \textit{Recursive clustering} field should point to (contain) the \textit{Name} of the next one, creating a "chain". Now having a newly added recursive clustering section, the user should select the \emph{birch} clustering method and set \emph{Cluster number} to \texttt{4} in order to divide the biggest cluster into 4 smaller pieces. Then they should set \emph{Recursive threshold} to \texttt{>0.9} to define the size of the cluster to be divided.
+\subsubsection{Add new clustering protocol}
+A new recursive clustering section can be added in the fourth tab, \textit{Clustering}, by clicking on the \textit{Add clustering section} button. Above this button, a \textit{Recursive clustering} option is visible. The value of this option (default being "clustering") points to the name of the next clustering section which should be added next. After clicking the button, the user will see another box titled "Recursive clustering" inside which the first field is \textit{Name}. This is the name that the first \textit{Recursive clustering} field should point to - their values should be the same name. The \textit{Name} of a newly added section will be "clustering0" by default. Here, the first \textit{Recursive clustering} field needs to be adjusted accordingly to "clustering0". This is indicating that clustering section of this name is to be executed as part of the recursive clustering. Should the user add more recursive clustering sections, each previous recursive clustering sections \textit{Recursive clustering} field should point to (contain) the \textit{Name} of the next one, creating a "chain". Now having a newly added recursive clustering section, the user should select the \emph{birch} clustering method and set \emph{Cluster number} to \texttt{4} in order to divide the biggest cluster into 4 smaller pieces. Then they should set \emph{Recursive threshold} to \texttt{>0.9} to define the size of the cluster to be divided.
 
 \begin{Checklists}
 \begin{checklist}{TIP}
@@ -374,6 +420,7 @@ The \emph{Recursive threshold} needs to be set to a float value which reflects t
 
 To speed up the calculations, the user needs to change \textit{execute} option to \texttt{run} inside the \textit{Inlets clustering} tab to ensure that the calculations will start from the clustering stage, and AQUA-DUCT will load the three previously generated \texttt{.dump} files. As the user may notice, the value of the \emph{Max level} option had changed to 1. This value is equal to the number of the recursive clustering sections added by the user and it is automatically set by the GUI Valve Configurator. When the user plans not to use the GUI Valve Configurator, they need to remember to set the \texttt{max\_level} option in the \texttt{[inlets\_clustering]} section in the configuration file manually. Now the user can save the modified configuration file as \texttt{config2.txt}
 
+\subsubsection{Re-run AQUA-DUCT calculations using the terminal}
 To run the AQUA-DUCT calculations, the user should type in the command line:
 \begin{lstlisting}[columns=fullflexible]
 valve_run -c config2.txt --debug-file aq2.log
@@ -400,6 +447,7 @@ all-+ {size: 1120; BarberCluster}
 \label{Tut2.1}
 \end{figure}
 
+\subsubsection{Check the results}
 After the calculations finish (on an Intel Core i7-4790 CPU @ 3.60 GHz machine these calculations take approx. 5 minutes), type the command below to visualize only clusters of inlets, the macromolecule, the \emph{Object} and the \emph{Scope}:
 \begin{lstlisting}[columns=fullflexible]
 python 6_visualize_results.py --keep 'molecule cluster scope object'
@@ -407,11 +455,17 @@ python 6_visualize_results.py --keep 'molecule cluster scope object'
 
 The biggest cluster was divided into four smaller clusters, but they do not reflect the entrances/exits to/from the active site cavity. However, by applying small changes to two of the clusters, namely \texttt{cluster\_5} and \texttt{cluster\_8}, the user will be able to achieve their goal (Figure \ref{Tut2.1}). The strategy proposed by the authors is as follows: two clusters need to be divided in halves, namely \texttt{cluster\_5} and \texttt{cluster\_8}. From the resulting clusters formed by the division of \texttt{cluster\_5}, the smallest one will become the cluster reflecting the side entrance/exit to the enzyme's active site and the second one will be the part of the gorge cluster between clusters \texttt{cluster\_6} and \texttt{cluster\_7}. From the resulting clusters from the division of \texttt{cluster\_8}, one part will be incorporated into \texttt{cluster\_7} and the other part will be joined with the gorge part of \texttt{cluster\_5}. 
 
+\subsubsection{Open the GUI Valve Configurator}
 The user needs to once again launch the GUI Valve Configurator by typing in their command line:
 \begin{lstlisting}
 valveconfig_run
 \end{lstlisting}
-and once again load the previously generated \texttt{config2.txt} file, select the Normal level of the configuration file editing and hit \textbf{Forward} button. In the \textit{Clustering} tab add another clustering section by clicking on the \textbf{Add clustering section} button. Then, in the newly generated "Recursive clustering" box, the \textit{Name} field will be set to \texttt{clustering1}. Here the user needs to remember to change the \textit{Recursive clustering} field of the last clustering section (here that would be \texttt{clustering0}) to this generated name (that is \texttt{clustering1}). Now in the \texttt{clustering1} the user needs to set the clustering method to \emph{birch} and set \emph{Cluster number} to \texttt{2}. Now the \emph{Recursive threshold} should be set to \texttt{<0.25} to ensure that both \texttt{cluster\_5} (size of 222 inlets, which reflects 0.2 of all identified inlets) and \texttt{cluster\_8} (size of 225 inlets, which reflects 0.2 of all identified inlets will be divided into 2 pieces. The last step will require joining clusters.
+and once again load the previously generated \texttt{config2.txt} file, select the Normal level of the configuration file editing and hit \textbf{Forward} button. 
+
+\subsubsection{Add new clustering protocol}
+In the \textit{Clustering} tab add another clustering section by clicking on the \textit{Add clustering section} button. Then, in the newly generated "Recursive clustering" box, the \textit{Name} field will be set to \texttt{clustering1}. Here the user needs to remember to change the \textit{Recursive clustering} field of the last clustering section (here that would be \texttt{clustering0}) to this generated name (that is \texttt{clustering1}). Now in the \texttt{clustering1} the user needs to set the clustering method to \emph{birch} and set \emph{Cluster number} to \texttt{2}. Now the \emph{Recursive threshold} should be set to \texttt{<0.25} to ensure that both \texttt{cluster\_5} (size of 222 inlets, which reflects 0.2 of all identified inlets) and \texttt{cluster\_8} (size of 225 inlets, which reflects 0.2 of all identified inlets will be divided into 2 pieces. The last step will require joining clusters.
+
+\subsubsection{Re-run AQUA-DUCT calculations using the terminal}
 Now the user needs to save the modified configuration file as \texttt{config3.txt} and run AQUA-DUCT calculations:
 \begin{lstlisting}[columns=fullflexible]
 valve_run -c config3.txt --debug-file aq3.log
@@ -434,6 +488,7 @@ all-+ {size: 1120; BarberCluster}
     4 {size: 1}
 \end{lstlisting}
 
+\subsubsection{Check the results}
 After the calculations finish (on an Intel Core i7-4790 CPU @ 3.60 GHz machine these calculations take approx. 5 minutes), type the command below to visualize only the clusters of inlets, the macromolecule, the \emph{Object} and the \emph{Scope}:
 \begin{lstlisting}[columns=fullflexible]
 python 6_visualize_results.py --keep 'molecule cluster scope object'
@@ -450,14 +505,19 @@ The user should be able to see nine clusters (Figure \ref{Tut2.2}), three of whi
 
 By \textit{outliers} the authors define inlets which represent rarely occurring passages, usually corresponding to the protein leakage or some other rare events. Such rare events can be useful for protein engineering, e.g. identification of potential pathway that can be opened to create fully functional tunnel \cite{Magdziarz2020,Brezovsky2016} or identification of cavities that can be used to reshape the binding site \cite{Mitusinska2018}.
 
+\subsubsection{Open the GUI Valve Configurator}
 For the last time the user needs to run the GUI Valve Configurator by typing in the command line:
 \begin{lstlisting}
 valveconfig_run
 \end{lstlisting}
-Then they need to load the previously generated \texttt{config3.txt} file, select the Normal level of the configuration file editing and hit \textbf{Forward} button. In the third tab, \textit{Inlets Clustering}, the user needs to set the \emph{Join clusters} option to \texttt{7+12 9+11} (please mind that there is no comma or a dot, only white space character) in the "Post Clustering Optimization" box. Please also tick the box next to the \emph{Renumber clusters} option to first join the selected clusters and then renumber them according to their sizes. To create an outliers cluster the user needs to change the \emph{Detect outliers} option to \texttt{Auto}, and set the \emph{Singletons outliers} to \texttt{1}. Setting \emph{Singletons outliers} to \texttt{1} will move the small clusters consisting of only one inlet to \texttt{cluster\_out}. As the user may also notice, the value of the \texttt{max\_level} option had changed to 2, reflecting the two additional recursive clustering sections which were added during the modification of the configuration file. 
+Then they need to load the previously generated \texttt{config3.txt} file, select the Normal level of the configuration file editing and hit \textit{Forward} button. 
+
+\subsubsection{Add new clustering protocol}
+In the third tab, \textit{Inlets Clustering}, the user needs to set the \emph{Join clusters} option to \texttt{7+12 9+11} (please mind that there is no comma or a dot, only white space character) in the "Post Clustering Optimization" box. Please also tick the box next to the \emph{Renumber clusters} option to first join the selected clusters and then renumber them according to their sizes. To create an outliers cluster the user needs to change the \emph{Detect outliers} option to \texttt{Auto}, and set the \emph{Singletons outliers} to \texttt{1}. Setting \emph{Singletons outliers} to \texttt{1} will move the small clusters consisting of only one inlet to \texttt{cluster\_out}. As the user may also notice, the value of the \texttt{max\_level} option had changed to 2, reflecting the two additional recursive clustering sections which were added during the modification of the configuration file. 
 
 Since the user is now reaching the final clustering which will successfully divide entries/exits of the analysed protein, they can additionally calculate relevant information like the volume and area of both the \textit{Object} and \textit{Scope}. For this, the user needs to select the \textit{Tracking} tab and in the "Calculate scope and object size" box, tick the option \textit{Calculate scope and object size} and set the definition of the \textit{Scope} and \textit{Object}; the \textit{Scope hull definition} should be set to \texttt{protein} and the \textit{Object convex hull} to \texttt{(resname *) and (sphzone 6.0 (resnum 99 or resnum 147 or resnum 231 or resnum 261 or resnum 289))}, repeating the \textit{Object} definition with the replacement of the molecule type (e.g., WAT) with an asterisk (*). As the user may see, the \textit{Cluster area} option is ticked automatically. It enables calculating the clusters’ areas with kernel density estimation method (KDE). To include such objects during the visualization, the user needs to tick the option \textit{Cluster area} in the \textit{Visualize} section as well. 
 
+\subsubsection{Re-run AQUA-DUCT calculations}
 Now the user needs to save the modified configuration file as \texttt{config4.txt} and run it using the following command:
 \begin{lstlisting}[columns=fullflexible]
 valve_run -c config4.txt --debug-file aq4.log
@@ -486,6 +546,7 @@ all-+ {size: 1120; BarberCluster}
     14 {size: 316; made of 9+11; new nr: 3}
 \end{lstlisting}
 
+\subsubsection{Final results analysis}
 On an Intel Core i7-4790 CPU @ 3.60 GHz machine these calculations take approx. 5 minutes and 30 seconds. The user can eventually generate the final PyMOL session with all calculated paths and save them to the \texttt{clustering\_final.pse} file. The user does not have to use the option, since sessions can still be saved in PyMOL manually.
 \begin{lstlisting}
 python 6_visualize_results.py --save-session clustering_final.pse
@@ -531,12 +592,14 @@ python 6_visualize_results.py --force-color 'cluster_1 forest cluster_2 pink clu
 \label{Tut2.4}
 \end{figure}
 
+\subsubsection{Summary}
 In this tutorial the user learned how to perform multi-level clustering using the GUI Valve Configurator tool. Running AQUA-DUCT calculations is possible also without using the GUI, only by editing the configuration file using the user's favourite text editor. This will be shown in the following tutorials. As it was mentioned, running multi-level clustering is useful in the case of a macromolecule which entrances/exits are not obviously separated. It should be noted that similar clustering results can be achieved by different clustering methods. The approach presented in this tutorial was chosen to demonstrate other useful options, such as \textit{Join clusters} and \textit{Singletons outliers}. To learn more about clustering methods implemented in AQUA-DUCT please check the \href{http://www.aquaduct.pl/clustering/}{Clustering tutorial} on the AQUA-DUCT website. The advanced clustering methods provide the user with an opportunity to flexibly merge and divide clusters according to the needs of the analysis. The user also learned how to use PyMOL visualizations to analyse the macromolecules's surface in order to identify the plausible entrances/exits to the cavity of particular interest.
 
 \subsection{Tutorial 3: Quantitative analysis and visualization of the results}
 
-In the previous two chapters, the user learned how much data can be acquired just with the visualization of the results in PyMOL. AQUA-DUCT calculations do not only allow to visualize the results, but also offer detailed  quantitative statistical data regarding the behaviour of tracked molecules, changes of the \textit{Scope} and \textit{Object} volume, etc. AQUA-DUCT includes a small and smart GUI application called \textit{kraken}, used to graphically visualize the aforementioned quantitative data. This chapter explains how to use it and presents results generated for the final results of AQUA-DUCT calculations in Tutorial 2. 
+In the previous two chapters, the user learned how much data can be acquired just with the visualization of the results in PyMOL. AQUA-DUCT calculations do not only allow to visualize the results, but also offer detailed  quantitative statistical data regarding the behaviour of tracked molecules, changes of the \textit{Scope} and \textit{Object} volume, etc. AQUA-DUCT includes a small and smart GUI application called \textit{kraken}, used to graphically visualize the aforementioned quantitative data. This chapter explains how to use it and presents results generated for the final results of AQUA-DUCT calculations in Tutorial 2. To distinguish from tabs, boxes and buttons from the GUI Valve Configurator, the boxes and buttons from \textit{kraken} GUI will be written in \textbf{bold text}.
 
+\subsubsection{What is the \emph{kraken} GUI?}
 Statistical and quantitative results obtained with AQUA-DUCT are gathered in files \texttt{5\_analysis\_results.txt} and \texttt{5\_analysis\_results.txt.csv}. The user needs to provide \textit{kraken} these files in order to perform the analysis.
 
 The first file, \texttt{5\_analysis\_results.txt}, consists of a set of 8 tables. A detailed explanation along with examples can be found in Supplementary figure 7 of the published article \cite{Magdziarz2020}. 
@@ -571,17 +634,20 @@ Additionally, the user can set the colours that would represent the clusters in 
 \label{table1}
 \end{table}
 
-To launch \textit{kraken}, the user should type the following command in the command line:
+\subsubsection{Run the \emph{kraken} GUI}
+To launch the \textit{kraken} GUI, the user should type the following command in the command line:
 \begin{lstlisting}
 kraken_run 
 \end{lstlisting}
 
+\subsubsection{Load files for analysis}
 The user should provide direct localisation of \newline \texttt{5\_analysis\_results.txt} and \texttt{5\_analysis\_results.txt.csv} files as respectively \textbf{Data file} and \textbf{CSV file}. Next, the user should provide the name of the \textbf{Output file} (e.g. \texttt{results.html}) which is a  file in \texttt{.html} format that will contain the preview of the \textit{kraken} results. Result figures and plots can be saved separately in graphical format after opening the \texttt{*.html} file with the results. 
 
 The user can additionally provide an independently prepared \textbf{Clusters info} file in sections \textit{Intramolecular flows} and \textit{Relative cluster flows} of the \textit{kraken} GUI. 
 
 The \textit{kraken} GUI window contains several blocks (Cluster size, Molecule entry time distribution, Intramolecular flows, etc.) that the user can select in order to obtain the specified results. Some of the blocks contain option \textbf{For all}. If the user is only tracking water molecules, a tick should be placed next to this option. If the user should like to track more than one molecule type (e.g., water and cosolvent) they could provide the names of the molecules to have separate results for each molecule type. 
 
+\subsubsection{Analyse the results}
 Most of the graphs acquired with \textit{kraken} are self-explanatory. 
 The first figure, \textbf{Clusters size} presents the size of all identified clusters (as a number of inlets) divided into INCOMING and OUTGOING inlets (Figure \ref{Tut3.1}A).
 
@@ -620,23 +686,26 @@ The \textbf{Clusters area} plots are based on the inlets clusters density. The p
 \label{Tut3.3}
 \end{figure}
 
+\subsubsection{Summary}
 In summary, the Tutorial 3 provides the user with statistical analysis of the sample data in accordance with the results visualized in the previous tutorial. In Tutorial 2, the user learned that AQUA-DUCT calculations provided information about the three main clusters, one side cluster and outliers cluster. The statistical data from Tutorial 3 additionally enriched the analysis with information about solvent flow between respective clusters, changes in \textit{Scope} and \textit{Object} areas and volumes, as well as distribution of molecules entry times. All this data is calculated by \textit{kraken} based on AQUA-DUCT result files, \texttt{5\_analysis\_results.txt} and \texttt{5\_analysis\_results.txt.csv}, which contain detailed information about the time of each molecule's entry/exit to/from \textit{Scope} and \textit{Object}. Data in these files is stored as tables, which can themselves be used to read information about the results, which provides the user a possibility to investigate the particulars of solvent flow throughout the course of the simulation along with rare events. 
 
 Tutorial 3 presents the rest of the results that can be acquired through AQUA-DUCT calculations with \textit{valve}. In the next tutorials, the user will learn what kind of data can be calculated with \textit{pond}.
 
 \subsection{Tutorial 4: Local distribution approach: hot-spots identification and energy profiles}
 
-This tutorial shows how to perform solvent distribution analysis and calculate pockets, hot-spots, and energy profiles. Such analysis can be used to perform a rational protein re-design. Hot-spots can indicate residues that are attracting some molecular probes of particular physico-chemical properties (i.e. in the case of water molecules used as such a probe they can mark residues that create strong hydrogen bonds), or trap molecules due to gating movements. On the other hand, information on the energy barrier along a particular tunnel (here represented by a smooth path) can be used to identify amino acids that are creating obstacles during the small molecules transportation. The modification of such identified amino acids can lower the energy barrier and therefore speed up the flow of small molecules.
+This tutorial shows how to perform solvent distribution analysis and calculate pockets, hot-spots, and energy profiles. Such an analysis can be used to perform a rational protein re-design. Hot-spots can indicate residues that are attracting some molecular probes of particular physico-chemical properties (i.e. in the case of water molecules used as such a probe they can mark residues that create strong hydrogen bonds), or trap molecules due to gating movements. On the other hand, information on the energy barrier along a particular tunnel (here represented by a smooth path) can be used to identify amino acids that are creating obstacles during the small molecules transportation. The modification of such identified amino acids can lower the energy barrier and therefore speed up the flow of small molecules.
 
-For this tutorial the user should use \href{http://www.aquaduct.pl/user-guide/}{sample data \#2} which comprises of topology and trajectory files of human soluble epoxide hydrolase in a water box and an additional \texttt{frames} directory which is used for time-window mode analysis described in the next tutorial. It is necessary for the calculations presented in this tutorial that the user provides \textit{pond} module with dump files (i.e., \texttt{2\_raw\_paths\_data.dump} and \texttt{3\_separate\_paths\_data.dump}) obtained as it was presented in Tutorial 1, as well as the trajectory, topology and configuration files downloaded from the AQUA-DUCT website.
+For this tutorial the user should use \href{http://www.aquaduct.pl/sample-data/}{sample data \#2} which comprises of topology and trajectory files of human soluble epoxide hydrolase in a water box and an additional \texttt{frames} directory which is used for time-window mode analysis described in the next tutorial. It is necessary for the calculations presented in this tutorial that the user provides \textit{pond} module with dump files (i.e., \texttt{2\_raw\_paths\_data.dump} and \texttt{3\_separate\_paths\_data.dump}) obtained as it was presented in Tutorial 1, as well as the trajectory, topology and configuration files downloaded from the AQUA-DUCT website.
 
-The first part of this tutorial will focus on hot-spots analysis and the second part will focus energy profile calculations. Those calculations can be run collectively, but for the clarity, they will be run separately here.
+The first part of this tutorial will focus on hot-spots analysis and the second part will focus energy profile calculations. Those calculations can be run collectively, but for the clarity, they will be run separately here. Here we would also like to show the users how to use the command line to generate and edit the configuration files. Therefore, all commands written in \texttt{monotype font}, should be added or changed in the configuration file.
 
+\subsubsection{Create a configuration file}
 The user should change their working directory to \texttt{2\_advanced\_analysis}, since for the purposes of this tutorial, one needs to use a different set of MD simulations data - sample data \#2. Prior to the advanced calculations, the user needs to create their own configuration file from the existing template:
 \begin{lstlisting}
 valve_run --dump-template-config > config.txt
 \end{lstlisting}
 
+\subsubsection{Edit the configuration file}
 Within the configuration file, the user needs to provide the names of trajectory and topology files from the sample data set \#2, along with the name of cache directory (here named \texttt{cache}), in which AQUA-DUCT will store the necessary data from each run of the calculations. The \emph{Scope} should be set to \texttt{protein} and the \emph{Object} definition is as follows: \texttt{(resname WAT) and (sphzone 5.0 (resid 98 or resid 146 or resid 259 or resid 229 or resid 287))}. The \texttt{add\_passing} option should also be used. For hot-spots calculations AQUA-DUCT uses local solvent distribution approach, therefore the hot-spots are determined as the most dense regions within the analysed macromolecule. \textit{Pond} can use two types of paths for the hot-spots calculations: i) only those molecules that entered both the \textit{Scope} and the \textit{Object}, and ii) all traced molecules that entered the \textit{Scope} (i.e., both \textit{passing paths} and standard paths). The second type of paths is called the passing paths. To use the information about the distribution of the solvent from the passing paths, the use of the \texttt{add\_passing} option is required.
 \begin{lstlisting}[columns=fullflexible]
 [global]
@@ -650,7 +719,7 @@ scope_convexhull = True
 object = (resname WAT) and (sphzone 5.0 (resid 98 or resid 146 or resid 259 or resid 229 or resid 287))
 add_passing = resname WAT
 \end{lstlisting}
-The \texttt{add\_passing} option could be set to any molecular entity, such as water molecules, ions, ligands or co-solvents, which will be traced at the moment it enters the \emph{Scope}, even without entering the \emph{Object}. Therefore, while using this option, the user should keep in mind that such computations could be more time- and resource-demanding.
+The \texttt{add\_passing} option could be set to any molecular entity, such as water molecules, ions, ligands or cosolvents, which will be traced at the moment it enters the \emph{Scope}, even without entering the \emph{Object}. Therefore, while using this option, the user should keep in mind that such computations could be more time- and resource-demanding.
 
 Clustering and visualization steps are not crucial and do not affect the results of calculations described in this tutorial, although running proper clustering and visualizing all available pathways that were used for the presented calculations could be useful. That is why the configuration file should also be adjusted. \texttt{auto\_barber} option should be set to \texttt{protein} in both \texttt{[separate\_paths]} and \texttt{[clustering]} sections to ensure the proper level of trimming paths. In the \texttt{[inlets\_clustering]} section the \texttt{create\_master\_paths} should be set to \texttt{True}, since the user would like to compare their raw and smooth paths with the master paths in further steps of this analysis. The following options in the \texttt{[visualize]} section should be set to \texttt{True}: \texttt{retain\_all\_types}, \texttt{all\_paths\_raw}, \texttt{all\_paths\_smooth}, \texttt{all\_paths\_split}, \texttt{paths\_raw}, \texttt{paths\_smooth}, \texttt{paths\_states}, \texttt{ctypes\_raw}, \texttt{ctypes\_smooth},  and \texttt{inlets\_clusters}. While most of the options are self-explanatory, three options should be explained: if the \texttt{all\_paths\_split} is set to \texttt{True} PyMOL will split the objects produced by \texttt{all\_paths\_raw} and \texttt{all\_paths\_smooth} into IN (red), OUT (blue), and OBJ (green and yellow) parts of paths; \texttt{paths\_states} will enable the visualization of all raw and smooth paths as separate states in PyMOL, and \texttt{retain\_all\_types} will enable the visualization of all paths. The \texttt{show\_molecule} and \texttt{show\_scope\_chull} options should be set to \texttt{protein} to enable the visualization of the analysed macromolecule, and the \texttt{show\_object\_chull} should be set to \texttt{(resname *) and (sphzone 5.0 (resid 98 or resid 146 or resid 259 or resid 229 or resid 287))}. The user should mind the small change in the definition of the \textit{Object} here, where the type of traced molecules was replaced by and asterisk (*) to ensure proper visualization of the \textit{Object} region.
 
@@ -681,10 +750,13 @@ method = barber
 auto_barber = protein
 \end{lstlisting}
 
+\subsubsection{Run AQUA-DUCT calculations using the terminal}
 The prepared configuration file should be then used to run basic calculations with AQUA-DUCT (Figure \ref{Tut4.1}):
 \begin{lstlisting}
 valve_run -c config.txt --debug-file aq.log
 \end{lstlisting}
+
+\subsubsection{Visualize the results}
 On an Intel Core i7-4790 CPU @ 3.60 GHz machine these calculations take approx. 7 minutes. 
 The user can now visualize the results in PyMOL and save the session (see Tutorials 1 and 2 for more details how to prepare the session containing objects of most interest):
 \begin{lstlisting}
@@ -698,10 +770,13 @@ python 6_visualize_results.py --save-session session.pse
 \label{Tut4.1}
 \end{figure}
 
+\subsubsection{Run \emph{pond}}
 AQUA-DUCT uses module called \textit{pond} to handle the hot-spots and energy profile calculations. \textit{Pond} can be run directly in the command line. The user can type in the command below to see the help information:
 \begin{lstlisting}
 pond_run -h
 \end{lstlisting}
+
+\subsubsection{Calculate pockets and hot-spots}
 Prior to hot-spots analysis, \emph{pond} needs to calculate pockets. Pockets represent the space of a particular macromolecule which was visited by tracked molecules during the simulation time. There are two types of pockets: Inner pocket represents places that were very often visited, while the Outer pocket stands for all the regions that were  penetrated. The user can modify the description of the Inner pocket by setting the \texttt{-{}-io-threshold} to a particular percentage value. By default, the median density value is used.
 
 \begin{figure}[ht!]
@@ -742,10 +817,12 @@ pond_run -c config.txt --debug-file pond_global.log --pockets --hotspots --raw -
 \emph{Pond} will then calculate the global hot-spots using the information on the trajectory and topology files listed in the configuration file, as well as data stored in \texttt{2\_raw\_paths\_data.dump}. 
 \emph{Pond} is also capable of dividing the provided simulation into smaller pieces, the so-called windows. The time-window analysis mode will be showed in detail in the next Tutorial.
 
+\subsubsection{Check the results}
 Hot-spots and pockets are stored as \texttt{.mol2} files (herein as: \texttt{inner\_full\_WAT\_local.mol2}, \texttt{outer\_full\_WAT\_local.mol2}, \texttt{hotspots\_full\_WAT\_local.mol2}, \newline \texttt{inner\_full\_WAT\_global.mol2}, \texttt{outer\_full\_WAT\_global.mol2}, and \texttt{hotspots\_full\_WAT\_global.mol2},) which are easy to open using PyMOL. The user can open those files in their previously created AQUA-DUCT results PyMOL session. During pockets calculation \emph{pond} creates also a \texttt{volumes\_WAT\_local.dat} and \texttt{volumes\_WAT\_global.dat} in which the information about the Inner and Outer pockets' volumes are saved in [Å\( \displaystyle ^{3}\)]. AQUA-DUCT package consists of a Python script dedicated to hot-spots analysis which can be used in PyMOL to manipulate with the hot-spots representation. 
 
 During the hot-spots calculations, \emph{pond} creates a \texttt{pond\_meta\_WAT\_local.json} file in which it stores the information of the reference density value. Using such information makes it possible for the user to manipulate the size of the obtained hot-spots and resize them according their density values (i.e., the most dense hot-spots will be bigger than those with lower density). PyMOL also offers an option to colour the hot-spots according to their density.
 
+\subsubsection{Resize hot-spots}
 To use the \texttt{hs\_resize.py} script from the AQUA-DUCT package, the user should type in within the PyMOL console:
 \begin{lstlisting}[columns=fullflexible]
 run /path/to/hs_resize.py
@@ -761,6 +838,7 @@ which hs_resize.py
 \end{lstlisting}
 in the command line.
 
+\subsubsection{Analyse the results}
 To additionally colour the hot-spots according to their density values, the user should type in the PyMOL console:
 \begin{lstlisting}[columns=fullflexible]
 spectrum pc, blue_white_red, hotspots_full_WAT_local
@@ -783,6 +861,7 @@ Please note that PyMOL offers many different colour palettes and that the last o
 \label{Tut4.4}
 \end{figure}
 
+\subsubsection{What is an energy profile?}
 Energy profile calculations are based on the density of traced molecules inside the \emph{Scope} and the Boltzmann distribution. Such calculations require a reference density value and a particular pathway along which the energy profile will be calculated. The selected path should be additionally smoothed so that it will represent the general overview of the particular passage. In the case where a raw path is used for the energy profile calculations, it will provide a very chaotic and knotted profile. For more information about smoothing paths the user is encouraged to see the \href{http://www.aquaduct.pl/smoothing-paths/}{Smoothing paths tutorial} on the AQUA-DUCT website.
 
 The energy profile is calculated according to Boltzmann inversion. Similar method was used in \cite{Rao2017} paper. Following equation relates free energy with density of molecules:
@@ -796,6 +875,7 @@ Term \( \displaystyle kT\ln\left(C\right)\) does not depend on \textit{z} and ca
 
 Here the authors present a paths smoothing method to adjust the selected path so it will represent the shape of the tunnel along which molecules are able to flow (the user is also encouraged to compare this smoothed path with the overall master path -  \texttt{3\_2\_raw\_master}. Too intensive smoothing may provide biased results, for example in a situation when the path will pass through regions occupied by macromolecule's atoms and cause a bias in the results, as shown in Figure \ref{Tut4.5}. The user should ensure that any chosen path resembles the shape of the tunnel and does not stick out of the internal pocket.
 
+\subsubsection{Smooth paths prior to energy profile calculations}
 For the presented sample data \#2, the user should consider adding the following smoothing options to their configuration file prior to running the energy profile calculations:
 \begin{lstlisting}
 [smooth]
@@ -811,11 +891,13 @@ The user can save the modified configuration file as \texttt{config\_smooth.txt}
 
 To keep all the data and avoid overwriting the files in next run of calculations, we recommend the user to copy the \texttt{3\_separate\_paths.dump}, \texttt{4\_inlets\_clustering\_data.dump}, \texttt{5\_analysis\_results.txt}, \texttt{5\_analysis\_results.txt.csv}, \texttt{6\_visualize\_results.py}, and \texttt{6\_visualize\_results.tar.gz} to the separate directory, called for example \texttt{run\_1}.
 
+\subsubsection{Run AQUA-DUCT calculations}
 The user should now re-run AQUA-DUCT calculations:
 \begin{lstlisting}
 valve_run -c config_smooth.txt --debug-file aq_smooth.log
 \end{lstlisting}
 
+\subsubsection{Check the results}
 When the calculations finish and paths are smoothed (it take approx. 2 minutes and 30 seconds on an Intel Core i7-4790 CPU @ 3.60 GHz machine), the user can visualize the results:
 \begin{lstlisting}
 python 6_visualize_results.py --save-session session_smooth.pse
@@ -824,6 +906,7 @@ and compare the \texttt{smooth\_paths} in the PyMOL session with those from the 
 
 The user needs to select the path along which they want to calculate the energy profile. The \texttt{5\_analysis\_results.txt} file provides the user a list of all identified pathways along with more detailed information on the tracked molecules. The contents of this file were discussed previously in Tutorial 3. By default, the paths in \texttt{5\_analysis\_results.txt} file are listed according to the tracked molecule ID and loaded into the PyMOL session in the same order. For example: the path 12 in PyMOL session has the \textbf{Path ID} of 0:650:0, and path 109 has ID: 0:3972:0. The number of the path in the PyMOL session is equal to the first column (\emph{Nr}) in the \texttt{List of separate paths and properties} table. The \textit{Path ID} is in the second column (\emph{ID}). The user should keep in mind that they want to use the smooth path and should always use the \texttt{-{}-path-smooth} option.
 
+\subsubsection{Calculate the energy profile}
 To run the energy profile calculation along the smoothed path, the user should type:
 \begin{lstlisting}
 pond_run -c config.txt --debug-file pond_energy_1961.log --energy-profile --path-id 0:1961:0 --path-smooth --reference-value 7.2185 -r Energy_profile/ --reference-mol 'resname WAT' --paths-types 'WAT'
@@ -835,6 +918,7 @@ pond_run -c config.txt --debug-file pond_energy_650.log --energy-profile --path-
 \end{lstlisting}
 The calculations take approx. 60 minutes on an Intel Core i7-4790 CPU @ 3.60 GHz machine.
 
+\subsubsection{Analyse the results}
 After the calculations, \emph{pond} will return two files, one with a graphical representation of the energy profile (here: \texttt{path0:1961:0\_\_radius.mol2} and \texttt{path0:650:0\_\_radius.mol2}) and the second with the results of energy calculations along the smoothed path (here: \texttt{path0:1961:0\_\_radius.dat} and \texttt{path0:1961:0\_\_radius.dat}). The user can open the \texttt{.mol2} file in their previously generated PyMOL session, while the \texttt{.dat} file can be easily used in their favourite plotting software to create a 2D plot of the energy profile (Figure \ref{Tut4.5}).
 
 \begin{figure*}[ht!]
@@ -880,16 +964,20 @@ where WINDOWS is a desired number of windows, TOTAL is total length of trajector
 Using time-window mode is recommended in cases where the macromolecule is rapidly changing its conformation what can affect the flow of tracked molecules. For the presentation of the time-window mode, the user should examine path number 48 (ID:~ 0:1961:0), to be able to observe the effect of conformational changes on the energy profile shape. They should also examine the time evolution of the global hot-spots. They are encouraged to run the local hot-spots calculations and compare the results (more information about calculating the local hot-spots are shown in the Tutorial 4).
 
 The sample data \#2 consist of 2,000 frames (10 ns saved each 5 ps). For demonstration purposes, the simulation will be divided into 5 windows, 400 frames each, and the windows will not overlap. The calculations presented below take approx. 39 minutes on an Intel Core i7-4790 CPU @ 3.60 GHz machine.
+
+\subsubsection{Run time-window analysis using \emph{pond}}
 To run such analysis the user should write in the command line:
 \begin{lstlisting}
 pond_run -c config.txt --debug-file pond_energy_wi5_1961.log --energy-profile --path-id 0:1961:0 --path-smooth --hotspots --pockets --windows 5 -- wsize 400 --raw --reference-value 7.2185 -r Analysis_in_windows/ --reference-mol 'resname WAT' --paths-types 'WAT' --output-suffix 'global'
 \end{lstlisting}
-The results will be stored in Analysis\_in\_windows directory.
+The results will be stored in \texttt{Analysis\_in\_windows} directory.
 
+\subsubsection{Check the results}
 Once again the user will be provided with the files consisting of results of pockets, hot-spots and energy profile analysis. In the case of generated \texttt{.mol2} files: pockets (\texttt{inner\_full\_WAT\_global.mol2}), (\texttt{outer\_full\_WAT\_global.mol2}), \hfill hot-spots (\texttt{hotspots\_full\_WAT\_global.mol2}), \hfill and \newline energy profile calculations \newline (\texttt{path0:1961:0\_\_WX\_radius\_WAT\_global.mol2}, their representations are possible to display in PyMOL as separate states corresponding to the consecutive windows. The numerical data from the energy profile calculations (i.e., the \texttt{.dat} files) the user will be provided with several different \texttt{.dat} files, each file corresponding to each of the calculated windows. The number of particular window for which the energy profile was calculated is marked in the file name, e.g., \texttt{path0:1961:0\_\_W1\_radius.dat} states for the first window, while \texttt{path0:1961:0\_\_W5\_radius.dat} for the fifth.
 
-The \texttt{hs\_resize.py} script and the \texttt{spectrum} command will work for the data calculated in windows in the same way as it was presented previously in the Tutorial 4. From the energy profile data, the user is able to create a 3D plot (in their favourite plotting software) of the time evolution of the energy profile along the selected pathway .
+The \texttt{hs\_resize.py} script and the \texttt{spectrum} command will work for the data calculated in windows in the same way as it was presented previously in the Tutorial 4. From the energy profile data, the user is able to create a 3D plot (in their favourite plotting software) of the time evolution of the energy profile along the selected pathway.
 
+\subsubsection{Summary}
 For the purpose of this analysis the user needs to use three MD simulation snapshots located in the \texttt{frames} directory, namely \texttt{frame\_199.pdb}, \texttt{frame\_1399.pdb}, and \texttt{frame\_1799.pdb} files, and open them within the previously generated PyMOL session. The entrance point of the analysed path is located in the \texttt{cluster\_3} which is placed at the border between the cap and the core domains. The entrance is controlled by two residues, Leu180 and Phe260 (numbering according to the trajectory file). At the beginning of the simulation, as shown in the first frame (i.e., \texttt{molecule0}) and frame 199, the entrance is wide open, while in frame 1399 (i.e., in the middle of the fourth window), the entrance gets very narrow. In frame 1799 (i.e., in the middle of the fifth window) the entrance widens up. Figure \ref{Tut4.6} shows the time evolution of the entrance and the presence of an energy barrier at the beginning of the selected path. The global hot-spots analysis supports this observation; there are more hot-spots near the entrance to the \texttt{cluster\_3} in the fourth window than in other windows (data not shown on the figure). The time-window mode of analysis is helpful in the cases when the macromolecule is flexible and often changes its conformation, which can affect the solvent transportation. However, the user should keep in mind the fact, that the time-window mode of calculations is more time-consuming than a similar calculation ran for the whole simulation.
 \pagebreak
 
@@ -897,12 +985,15 @@ For the purpose of this analysis the user needs to use three MD simulation snaps
 
 This tutorial shows how to analyse the system with more than one solvent. In such a case, each type of small molecule works as a different type of molecular probe and the results of calculations can be used e.g. as an approximation of the study of the passage of hydrophobic molecules or for pharmacophore description during the drug design process. Here, the main focus will be on obtaining the information about pockets and hot-spots for particular solvent using the \emph{pond} module. The user should bear in mind that any analyses that the user wants to perform using the \emph{pond} module requires prior calculations with the \emph{valve} module. This is because the \emph{pond} uses the information that are stored in the \texttt{2\_raw\_paths\_data.dump} and \texttt{3\_separate\_paths\_data.dump}, respectively. 
 
-Herein, the user should use \href{http://www.aquaduct.pl/user-guide/}{sample data \#3} which comprises of topology and trajectory files of human soluble epoxide hydrolase inside a box containing water molecules in a mixture with acetonitrile molecules. Since the user will now use another set of sample data, sample data \#3, they should change their working directory to \texttt{3\_cosolvents\_analysis} in order to not override their previously generated results.
+Herein, the user should use \href{http://www.aquaduct.pl/sample-data/}{sample data \#3} which comprises of topology and trajectory files of human soluble epoxide hydrolase inside a box containing water molecules in a mixture with acetonitrile molecules. Since the user will now use another set of sample data, sample data \#3, they should change their working directory to \texttt{3\_cosolvents\_analysis} in order to not override their previously generated results.
 
+\subsubsection{Create a configuration file}
 The user will use the knowledge acquired during performing Tutorial 1, 2, and Tutorial 4. To print and save the template configuration file, the user should use the following command in the command line:
 \begin{lstlisting}[columns=fullflexible]
 valve_run --dump-template-config > config.txt
 \end{lstlisting}
+
+\subsubsection{Edit the configuration file}
 The config.txt file will be created in the directory in which the command was launched. After opening the configuration file, the first modification that needs to be done is to enter the appropriate \texttt{[global]} settings. The proper path to both topology and trajectory files must be provided and setting a path to the directory for cache data is advised. 
 \begin{lstlisting}
 [global]
@@ -956,11 +1047,13 @@ show_scope_chull = protein
 show_object_chull = (resname *) and (sphzone 5.0 (resid 98 or resid 146 or resid 259 or resid 229 or resid 287))
 \end{lstlisting}
 
+\subsubsection{Save the configuration file and run AQUA-DUCT calculations}
 All changes should be saved and the user is now ready to launch AQUA-DUCT calculations. To start the calculations, the user should type in the following command in the command line:
 \begin{lstlisting}
 valve_run -c config.txt --debug-file aq.log 
 \end{lstlisting}
 
+\subsubsection{Visualize the results}
 When the calculations are complete (on an Intel Core i7-4790 CPU @ 3.60 GHz machine it take approx. 9 minutes), the user can visualize the results by using the following command in the command line:
 \begin{lstlisting}
 python 6_visualize_results.py
@@ -984,6 +1077,7 @@ python 6_visualize_results.py --keep 'molecule cluster scope object raw' --disca
 \label{Tut6.2}
 \end{figure}
 
+\subsubsection{Calculate hot-spots for different types of molecules}
 Since the main emphasis of this tutorial is on the analysis of hot-spots and pockets for particular solvent, therefore, it is necessary to run \emph{pond} analysis. With \emph{pond}, the user will perform the following calculations: pockets, local and global hot-spots for both solvents. First, calculations for acetonitrile molecules will be performed (on an Intel Core i7-4790 CPU @ 3.60 GHz machine they take approx. 1 minute). To do that, the user should type the following command in the command line:
 \begin{lstlisting}
 pond_run -c config.txt --debug-file pond_hs_ACN_local.log --pockets --hotspots --reference-calc --reference-mol 'resname ACN WAT' --paths-types 'ACN' --output-suffix 'local' -r Hotspots_local/ACN/ 
@@ -1007,6 +1101,8 @@ For global pockets and hot-spots, the user should write in the command line (on 
 \begin{lstlisting}
 pond_run -c config.txt --debug-file pond_hs_WAT_global.log --pockets --hotspots --reference-value 7.4281 --paths-types 'WAT' --output-suffix 'global' --raw -r Hotspots_global/WAT/ 
 \end{lstlisting}
+
+\subsubsection{Resize the calculated hot-spots}
 When all pockets and hot-spots are calculated, the user can load the results into the previously saved session. As explained in the Tutorial 4, the user can change size of the hot-spots using the \texttt{hs\_resize.py} script from the AQUA-DUCT package. In the PyMOL console, the user should type:
 \begin{lstlisting}[columns=fullflexible]
 run /path/to/hs_resize.py
@@ -1032,10 +1128,16 @@ In addition to changing the hot-spots size, the user may also change their colou
 \label{Tut6.4}
 \end{figure}
 
+\subsubsection{Analyse the results}
 The user can now determine in which regions hot-spots are most likely to be found, and thus, analyse these places more precisely, e.g. in the context of possible protein engineering or drug design. As the user may see, in the case of local hot-spots, for water molecules, they are placed within the close vicinity of the active site indicated by the \texttt{Object}, while for acetonitrile molecules, they occupy more distant regions.
+
 In Figure \ref{Tut6.3} B, the user can see the differences in the inner pockets for acetonitrile and water molecules. The volume of acetonitrile's inner pocket is smaller, since the proportion of the acetonitrile molecules in the system was much smaller compared to water molecules and the acetonitrile molecules penetrate the protein's interior to a lesser extent. The volumes of inner (also outer) pockets can be found in the \texttt{volumes\_ACN\_local.dat} and \texttt{volumes\_WAT\_local.dat} files which were saved in the respective directories during the \emph{pond} calculations. Herein, the inner pocket volume for acetonitrile molecules is 260 Å\( \displaystyle ^{3}\), while for water molecules the inner pocket volume is almost twice as large and amounts to 477 Å\( \displaystyle ^{3}\).
 
+\subsubsection{Summary}
 Typically, in the case of the multiple solvent analysis, calculations are performed for at least few different solvents. Usually, several different combinations are analysed (e.g. water+acetamide, water+benzene, water+isopropanol, water+methanol, water+acetonitrile, etc.), in which the vast majority are water molecules, while the cosolvent makes up a certain percentage of the system. The authors suggest that in such cases, the analysis should be as follows: conduct pockets and hot-spots analysis for a system containing water molecules as pure solvent (considered as a reference system, as data set \#2), conduct pockets and hot-spots analysis for mixed systems while limiting the type of molecules present in the system only to the cosolvent molecules (e.g. acetonitrile). Results obtained from different (co)solvents can then be superimposed in PyMOL on one structure and the user may identify regions in the macromolecule which overlap in terms of presence of different types of hot-spots as well as determine those which are unique.     
+
+\section{Summary}
+AQUA-DUCT is a unique software that reverses the commonly used approach of describing the evolution of macromolecules’ dynamics through their atoms’ movement analysis and enables the investigation of macromolecules from the intramolecular voids perspective. It is possible by sampling the macromolecule's dynamics employing small molecular probes (most frequent water molecules, but also other cosolvents, ions, or other ligands). AQUA-DUCT goes beyond the basic identification of the functionally relevant tunnels towards the identification of structurally important residues and/or regions of macromolecules, an analysis of the voids’ evolution, dynamics of hot-spots, and approximation of free energy profiles of transportation pathways. The usage of specific molecular probes, their trajectories and occupancy allow discrimination between functionally relevant compartments and overcoming the limitations of geometrically based approaches. The user benefits from analyses that can facilitate the understanding of macromolecules, protein engineering, and drug design. Among the most important advantages of AQUA-DUCT is its independence from the MD simulations software and used force fields or water models. The user has also the flexibility to define the areas of interest that they want to analyse, as well as to trace various types of small molecules present in the system. Besides that, the user can choose between different modes implemented in AQUA-DUCT that allow them to perform very specific analyses. 
 
 \section{Author Contributions}
 %%%%%%%%%%%%%%%%
